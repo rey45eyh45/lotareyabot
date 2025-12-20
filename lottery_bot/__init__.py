@@ -1,0 +1,1 @@
+"""Lottery bot package."""
