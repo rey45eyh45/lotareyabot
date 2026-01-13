@@ -3,3 +3,6 @@ __pycache__/
 .env
 .venv/
 data/store.json
+*.log
+.idea/
+.vscode/

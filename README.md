@@ -78,3 +78,39 @@ main.py              # Botni ishga tushirish nuqtasi
 - `✏️ Start xabarini tahrirlash` bo'limida quyidagi o'zgaruvchilardan foydalanish mumkin: `{prize}`, `{total_tickets}`, `{remaining_tickets}`, `{ticket_price}`.
 - `📡 Kanal boshqaruvi` orqali majburiy obuna xabarini sozlashda `{channels}` o'zgaruvchisi kanal ro'yxati bilan almashtiriladi.
 - `data/store.json` fayli bot ishlash jarayonida avtomatik yaratiladi va yangilanadi. Uni o'chirib yuborsangiz, mavjud chiptalar yana 300 tadan boshlanadi.
+
+## Railway.app da Deploy
+
+1. **GitHub'ga yuklash**
+
+   ```bash
+   git add .
+   git commit -m "Railway deploy tayyorlash"
+   git push origin master
+   ```
+
+2. **Railway.app orqali deploy**
+
+   - [Railway.app](https://railway.app) ga kiring va GitHub orqali tizimga kiring.
+   - "New Project" → "Deploy from GitHub repo" ni tanlang.
+   - `lotareyabot` repositoriyasini tanlang.
+   - Deploy avtomatik boshlanadi.
+
+3. **Environment Variables**
+
+   Railway proyektingizda quyidagi muhit o'zgaruvchilarini sozlang:
+   - `BOT_TOKEN` - Telegram bot tokeni
+   - `ADMIN_ID` - Admin Telegram ID raqami
+   - `CARD_NUMBER` - To'lov uchun karta raqami
+   - `PRIZE_NAME` - Sovrin nomi (masalan: iPhone 16 Pro Max)
+   - `TOTAL_TICKETS` - Jami chiptalar soni (masalan: 300)
+   - `TICKET_PRICE` - Chipta narxi (masalan: 50000)
+
+4. **Redeploy**
+
+   Environment o'zgaruvchilarini qo'shgandan so'ng "Deploy" tugmasini bosing.
+
+5. **Logs**
+
+   Botning ishlashini tekshirish uchun "Deployments" → "View Logs" ni ko'ring.
+

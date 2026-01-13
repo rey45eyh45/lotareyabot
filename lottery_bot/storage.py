@@ -441,6 +441,12 @@ class StorageManager:
         async with self._lock:
             return [dict(item) for item in self._data["pending"].values()]
 
+    async def list_all_users(self) -> List[Dict[str, Any]]:
+        """Return all users sorted by total tickets (descending)."""
+        async with self._lock:
+            users = [dict(record) for record in self._data["users"].values()]
+            return sorted(users, key=lambda x: (x.get("total_tickets", 0), x.get("total_spent", 0)), reverse=True)
+
     async def list_user_ids(self) -> List[int]:
         async with self._lock:
             result: List[int] = []
@@ -634,3 +640,23 @@ class StorageManager:
         else:
             channels_block = "• Kanallar qo'shilmagan"
         return message_template.format(channels=channels_block)
+
+    async def reset_all_data(self) -> None:
+        """Reset all data to initial state."""
+        async with self._lock:
+            self._data = self._default_payload()
+            self._persist(self._data)
+
+    async def restore_from_backup(self, backup_path: str) -> None:
+        """Restore data from a backup file."""
+        import json
+        async with self._lock:
+            with open(backup_path, "r", encoding="utf-8") as f:
+                backup_data = json.load(f)
+            
+            # Ensure defaults exist
+            self._ensure_defaults(backup_data)
+            
+            # Save to current storage
+            self._data = backup_data
+            self._persist(self._data)

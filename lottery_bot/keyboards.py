@@ -21,9 +21,10 @@ def admin_menu_keyboard() -> ReplyKeyboardMarkup:
     """Reply keyboard for admin actions."""
     return ReplyKeyboardMarkup(
         keyboard=[
-            ["📊 Statistika"],["✉️ Xabar yuborish"],
-            [ "📡 Kanal boshqaruvi"],["📥 Excel eksport"],
-            [ "♻️ Tasdiqlanganlarni bekor qilish"],
+            ["🏠 Bosh sahifa", "📊 Statistika"],
+            ["⏳ Kutilayotgan to'lovlar", "✅ Tasdiqlangan to'lovlar"],
+            ["✉️ Xabar yuborish", "👥 Foydalanuvchilar"],
+            ["📡 Kanal boshqaruvi", "📥 Excel eksport"],
             ["⚙️ Bot sozlamlari"],
         ],
         resize_keyboard=True,
@@ -42,10 +43,22 @@ def admin_decision_keyboard(purchase_id: str) -> InlineKeyboardMarkup:
     )
 
 
+def cancel_keyboard() -> ReplyKeyboardMarkup:
+    """Reply keyboard with cancel button for purchase flow."""
+    return ReplyKeyboardMarkup(
+        keyboard=[["❌ Bekor qilish"]],
+        resize_keyboard=True,
+        one_time_keyboard=True,
+    )
+
+
 def request_contact_keyboard() -> ReplyKeyboardMarkup:
     """Reply keyboard requesting the user's phone number."""
     return ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton("📞 Telefon raqamni yuborish", request_contact=True)]],
+        keyboard=[
+            [KeyboardButton("📞 Telefon raqamni yuborish", request_contact=True)],
+            ["❌ Bekor qilish"],
+        ],
         resize_keyboard=True,
         one_time_keyboard=True,
     )

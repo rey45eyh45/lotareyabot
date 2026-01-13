@@ -17,6 +17,7 @@ from telegram.ext import (
 
 from lottery_bot.keyboards import (
     admin_decision_keyboard,
+    cancel_keyboard,
     main_menu_keyboard,
     request_contact_keyboard,
     subscription_prompt_keyboard,
@@ -164,7 +165,8 @@ async def buy_ticket_entry(update: Update, context: CallbackContext) -> int:
         return ConversationHandler.END
 
     await update.message.reply_text(
-        "🎟 Nechta chipta sotib olmoqchisiz? (1 dan {remaining} gacha son kiriting)".format(remaining=remaining)
+        "🎟 Nechta chipta sotib olmoqchisiz? (1 dan {remaining} gacha son kiriting)".format(remaining=remaining),
+        reply_markup=cancel_keyboard(),
     )
     return WAITING_QUANTITY
 
@@ -221,7 +223,7 @@ async def _send_payment_instructions(update: Update, context: CallbackContext, p
     )
     await update.message.reply_text(
         instructions,
-        reply_markup=ReplyKeyboardRemove(),
+        reply_markup=cancel_keyboard(),
     )
 
 
@@ -386,19 +388,27 @@ def build_conversation_handler() -> ConversationHandler:
             CommandHandler("buy", buy_ticket_entry),
         ],
         states={
-            WAITING_QUANTITY: [MessageHandler(filters.TEXT & ~filters.COMMAND, receive_quantity)],
+            WAITING_QUANTITY: [
+                MessageHandler(filters.Regex("^❌ Bekor qilish$"), cancel),
+                MessageHandler(filters.TEXT & ~filters.COMMAND, receive_quantity),
+            ],
             WAITING_CONTACT: [
+                MessageHandler(filters.Regex("^❌ Bekor qilish$"), cancel),
                 MessageHandler(filters.CONTACT, receive_contact),
                 MessageHandler(filters.TEXT & ~filters.COMMAND, receive_contact),
             ],
             WAITING_RECEIPT: [
+                MessageHandler(filters.Regex("^❌ Bekor qilish$"), cancel),
                 MessageHandler(
                     (filters.PHOTO | filters.Document.ALL) & ~filters.COMMAND,
                     receive_receipt,
-                )
+                ),
             ],
         },
-        fallbacks=[CommandHandler("cancel", cancel)],
+        fallbacks=[
+            MessageHandler(filters.Regex("^❌ Bekor qilish$"), cancel),
+            CommandHandler("cancel", cancel),
+        ],
         allow_reentry=True,
     )
 
