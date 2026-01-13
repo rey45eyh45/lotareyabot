@@ -1,8 +1,0 @@
-# Railway.app uchun Nixpacks konfiguratsiyasi
-providers = ["python"]
-
-[phases.install]
-dependsOn = ["setup"]
-
-[variables]
-NIXPACKS_PYTHON_VERSION = "3.11"
